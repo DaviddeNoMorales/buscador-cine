@@ -1,6 +1,6 @@
 import requests
 
-API_KEY = '2e2e16b58b6950f55daf9dabf2cedcfb'
+API_KEY = os.getenv('API_KEY')
 
 def buscar_peliculas(query):
     url = f"https://api.themoviedb.org/3/search/movie?api_key={API_KEY}&query={query}&language=es-ES&include_adult=false"

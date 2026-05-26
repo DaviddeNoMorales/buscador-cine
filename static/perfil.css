@@ -39,3 +39,8 @@ body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-c
 .form-user button:hover { background: #f40612; }
 .lista-usuarios { list-style: none; padding: 0; display: flex; gap: 10px; flex-wrap: wrap; }
 .lista-usuarios li { background: #333; padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: bold; }
+@media (max-width: 600px) {
+    .perfil-hero { flex-direction: column; text-align: center; }
+    .grid-peliculas { justify-content: center; }
+    .item-peli { width: 140px; }
+}
