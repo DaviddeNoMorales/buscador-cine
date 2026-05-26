@@ -213,14 +213,21 @@ async def perfil(request: Request):
 
     favs = conn.execute("SELECT * FROM favoritos WHERE user_id = ?", (user_id,)).fetchall()
     pendientes = conn.execute("SELECT * FROM pendientes WHERE user_id = ?", (user_id,)).fetchall()
-    usuarios = conn.execute("SELECT * FROM users WHERE is_admin = 0").fetchall() if request.cookies.get("is_admin") == "1" else []
+    usuarios = conn.execute("SELECT * FROM users WHERE is_admin = 1").fetchall() if request.cookies.get("is_admin") == "1" else []
     conn.close()
     
     fav_por_gen = {}
     for fav in favs:
         gen = fav['genre_name']
         if gen not in fav_por_gen: 
-            fav_por_gen[gen] = {"peliculas": [], "recomendaciones": obtener_recomendaciones(fav['movie_id'])}
+            # Obtenemos las recomendaciones puras desde la API
+            lista_recom = obtener_recomendaciones(fav['movie_id'])
+            # Construimos la URL completa de las imágenes para que el HTML pueda leerlas
+            if lista_recom:
+                for r in lista_recom:
+                    r['poster_url'] = f"https://image.tmdb.org/t/p/w342{r['poster_path']}" if r.get('poster_path') else ""
+            
+            fav_por_gen[gen] = {"peliculas": [], "recomendaciones": lista_recom}
         fav_por_gen[gen]["peliculas"].append(fav)
         
     return templates.TemplateResponse(
